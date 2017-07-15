@@ -1,0 +1,25 @@
+{
+  "name": "bamazon",
+  "version": "1.0.0",
+  "description": "an ecommerce non-GUI app",
+  "main": "bamazonCustomer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JayaArasalike/bamazon.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JayaArasalike/bamazon/issues"
+  },
+  "homepage": "https://github.com/JayaArasalike/bamazon#readme",
+  "dependencies": {
+    "colors": "^1.1.2",
+    "console.table": "^0.8.0",
+    "inquirer": "^3.2.0",
+    "mysql": "^2.13.0"
+  }
+}

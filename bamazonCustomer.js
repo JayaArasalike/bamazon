@@ -21,6 +21,7 @@ connection.connect(function(err) {
   readProducts();
 });
 
+//lists the data from table
 function readProducts() {
   	console.log("Products available for sale in bamazon...\n".bold);
   	console.log("----------------------------------------------------------------------------");
@@ -32,7 +33,7 @@ function readProducts() {
   });
 }
 
-
+//asks whether user wants to make a purchase or quit
 function runOptions() {
 	inquirer.prompt({
 		name: "action",
@@ -60,6 +61,7 @@ function runOptions() {
 	});
 }
 
+//asks for the item_id and quantity that user wants to buy
 function makePurchase() {
 	inquirer.prompt([
 		{
@@ -87,36 +89,38 @@ function makePurchase() {
 
 	])
 	.then(function(answer) {
-		console.table(answer);
 		
 		connection.query("SELECT product_name, price, stock_quantity FROM products WHERE ?", {item_id: answer.item_id}, function(err, res) {
-			//for(var i = 0; i < res.length; i++)
-			console.log("here");
+			
 			if (err) {
 				throw err;
 			}
 			else if (res.length > 0) {
 				if (res[0].stock_quantity >= answer.quantity) {
-					updateProduct(res[0], answer);
 					var totalPrice = answer.quantity * res[0].price;
+					console.log(totalPrice);
 					console.log("----------------------------------------------------------------------------");
-					console.log(" Your total cost for" + answer.quantity.bold + " " + res[0].product_name.bold + " is : " + totalPrice.bold);
+					console.log(" Your total cost for " + answer.quantity.bold + " " + res[0].product_name.bold + " is : " + totalPrice);
+					console.log("Your order# is 12345. Thank you for purchasing!".bold.green)
 					console.log("----------------------------------------------------------------------------");
+					updateProduct(res[0], answer);
 				}
 				else {
-					console.log("Insufficient quantity!!".bold);
+					console.log("Insufficient quantity!! \n\n".bold.red);
 				}
 			}
 			else {
-				console.log("The item_id you entered is incorrect! Please enter the correct item_id");
+				console.log("The item_id you entered is incorrect! Please enter the correct item_id \n\n".bold.red);
 			}
+			//makePurchase();
+			runOptions();
 		})
-		connection.end();
 	})
 }
 
+//updates the database
 function updateProduct(row, answer) {
-  console.log("Updating the database...\n");
+  //console.log("Updating the database...\n");
   var query = connection.query(
     "UPDATE products SET ? WHERE ?",
     [
@@ -128,14 +132,11 @@ function updateProduct(row, answer) {
       }
     ],
     function(err, res) {
-      
-      console.log(res.affectedRows + " products updated!\n");
-   
+    	if (err) throw err;
+      	//console.log(res.affectedRows + " products updated!\n");
+   		//connection.end();
     }
   );
-
-  // logs the actual query being run
-  //console.log(query.sql);
 }
 
 
